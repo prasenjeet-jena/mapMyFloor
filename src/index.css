@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-display: 'DM Sans', sans-serif;
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  
+  --color-user: #3B82F6;
+  --color-destination: #F97316;
+  --color-route: #60A5FA;
+  --color-room-default: #1E293B;
+  --color-room-hover: #334155;
+  --color-room-selected: #1E3A5F;
+  --color-walkable: #0F172A;
+  
+  --color-bg: #0F1117;
+  --color-surface: #1A1D27;
+  --color-surface-alt: #232736;
+  --color-border: #2E3347;
+  
+  --color-text-primary: #F1F5F9;
+  --color-text-secondary: #94A3B8;
+  --color-text-disabled: #475569;
+  
+  --color-success: #22C55E;
+  --color-warning: #EAB308;
+  --color-error: #EF4444;
+  --color-accent: #818CF8;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+  }
+}
