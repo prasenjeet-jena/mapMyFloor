@@ -1,0 +1,7 @@
+[
+  {
+    "origin": ["http://localhost:5173", "https://mapmyfloor-be60b.web.app", "https://mapmyfloor-be60b.firebaseapp.com"],
+    "method": ["GET"],
+    "maxAgeSeconds": 3600
+  }
+]

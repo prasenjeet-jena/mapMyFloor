@@ -1,12 +1,20 @@
 export enum RoomType {
   MEETING_ROOM = 'meeting_room',
-  DESK = 'desk',
+  CONFERENCE_ROOM = 'conference_room',
+  DESK_AREA = 'desk_area',
+  RECEPTION = 'reception',
   CAFETERIA = 'cafeteria',
   RESTROOM = 'restroom',
   ELEVATOR = 'elevator',
-  STAIRS = 'stairs',
+  STAIRCASE = 'staircase',
   CORRIDOR = 'corridor',
-  UTILITY = 'utility',
+  MEDICAL = 'medical',
+  PRAYER = 'prayer',
+  RECREATION = 'recreation',
+  ADMIN = 'admin',
+  HR = 'hr',
+  IT_SERVER = 'it_server',
+  BOARDROOM = 'boardroom',
   OTHER = 'other'
 }
 
@@ -54,18 +62,24 @@ export interface Floor {
 }
 
 export interface Room {
-  id: string;
-  buildingId: string;
-  floorId: string;
+  id?: string;
+  buildingId?: string;
+  floorId?: string;
   name: string;
   type: RoomType;
-  polygon: Point[]; // Array of vertices
-  centroid: Point;
+  polygon?: Point[]; // Array of vertices
+  centroid?: Point;
   occupant?: string | null;
   occupantEmail?: string | null;
   isWalkable: boolean;
   realWidth?: string;
   realHeight?: string;
+  bbox?: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
 }
 
 export interface Direction {

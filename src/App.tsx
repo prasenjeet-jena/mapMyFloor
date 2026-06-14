@@ -6,7 +6,7 @@ import Header from './shared/components/Header';
 import { FloorContext } from './hooks/useFloor';
 import { DevModeProvider } from './features/devmode/DevModeToggle';
 import { Floor } from './shared/types';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, collectionGroup } from 'firebase/firestore';
 import { db } from './services/firebase';
 
 // Page components
@@ -51,18 +51,20 @@ export function FloorProvider({ children }: { children: React.ReactNode }) {
     const fetchFloors = async () => {
       setLoadingFloors(true);
       try {
-        const floorsRef = collection(db, 'buildings/default/floors');
-        const q = query(floorsRef, orderBy('floorNumber', 'asc'));
-        const snapshot = await getDocs(q);
+        // Query all floors across all buildings
+        const snapshot = await getDocs(collectionGroup(db, 'floors'));
         
         const fetchedFloors = snapshot.docs.map(doc => ({
-          id: doc.id,
           ...doc.data()
         })) as Floor[];
 
+        // Sort by floorNumber
+        fetchedFloors.sort((a, b) => a.floorNumber - b.floorNumber);
+
         if (fetchedFloors.length > 0) {
           setFloors(fetchedFloors);
-          setCurrentFloor(fetchedFloors[0]);
+          // Only auto-select if one isn't set yet
+          setCurrentFloor((prev) => prev || fetchedFloors[0]);
         } else {
           // Provide placeholder floors for visual testing if DB has no data yet
           const placeholders: Floor[] = [
@@ -100,7 +102,7 @@ export function FloorProvider({ children }: { children: React.ReactNode }) {
             }
           ];
           setFloors(placeholders);
-          setCurrentFloor(placeholders[1]); // Default to 5th floor
+          setCurrentFloor((prev) => prev || placeholders[1]); // Default to 5th floor
         }
       } catch (err) {
         console.error('Error fetching floors from firestore:', err);
