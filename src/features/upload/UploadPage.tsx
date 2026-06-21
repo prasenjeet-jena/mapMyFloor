@@ -17,8 +17,8 @@ import {
 import { parseFloorPlan, ParseFloorPlanResponse } from '../../services/floorPlanService';
 import { useAuth } from '../../App';
 import { uploadFloorPlanImage } from '../../services/storage';
-import { ensureAdminUser, saveBuildingAndFloor, saveRooms } from '../../services/firestore';
-import { Building, Floor, Room } from '../../shared/types';
+import { ensureAdminUser, saveBuildingAndFloor, saveRooms, saveCorridorGraph } from '../../services/firestore';
+import { Building, Floor, Room, CorridorGraph } from '../../shared/types';
 
 export default function UploadPage() {
   const navigate = useNavigate();
@@ -200,51 +200,94 @@ export default function UploadPage() {
         imageUrl,
         imageWidth: dimensions.width,
         imageHeight: dimensions.height,
-        pixelsPerMeter: results.pixelsPerMeter,
-        realWidthMeters: results.floorWidthMeters,
-        realHeightMeters: results.floorHeightMeters,
+        pixelsPerMeter: results.scale.pixelsPerMeter,
+        realWidthMeters: results.scale.floorWidthMeters,
+        realHeightMeters: results.scale.floorHeightMeters,
         walkableGrid: '', // blank serialized grid
         gridCellSize: 10,
         aiParsed: true,
         scaleManuallyVerified: false
       };
 
-      // 6. Map rooms and translate percentage bboxes to pixel centroids/polygons
+      // 6. Map rooms and translate percentage polygon & door coords to pixel coords
       const roomsToSave: Room[] = (results.rooms ?? [])
-        .filter((r) => r && r.bbox)
         .map((r, index) => {
-          const bbox = r.bbox!;
-          
-          const xPx = (bbox.x / 100) * dimensions.width;
-          const yPx = (bbox.y / 100) * dimensions.height;
-          const wPx = (bbox.width / 100) * dimensions.width;
-          const hPx = (bbox.height / 100) * dimensions.height;
+          const polygon = (r.polygon ?? []).map((pt) => ({
+            x: (pt.x / 100) * dimensions.width,
+            y: (pt.y / 100) * dimensions.height
+          }));
 
-          const centroid = {
-            x: xPx + wPx / 2,
-            y: yPx + hPx / 2
-          };
+          const doors = (r.doors ?? []).map((pt) => ({
+            x: (pt.x / 100) * dimensions.width,
+            y: (pt.y / 100) * dimensions.height
+          }));
 
-          const polygon = [
-            { x: xPx, y: yPx },
-            { x: xPx + wPx, y: yPx },
-            { x: xPx + wPx, y: yPx + hPx },
-            { x: xPx, y: yPx + hPx }
-          ];
+          // Compute a centroid from the polygon if it has points
+          let centroid = { x: 0, y: 0 };
+          if (polygon.length > 0) {
+            let sumX = 0;
+            let sumY = 0;
+            polygon.forEach((pt) => {
+              sumX += pt.x;
+              sumY += pt.y;
+            });
+            centroid = {
+              x: sumX / polygon.length,
+              y: sumY / polygon.length
+            };
+          }
+
+          // Compute a bounding box from the polygon points to keep existing canvas overlay code working
+          let bbox = undefined;
+          if (polygon.length > 0) {
+            let minX = Infinity;
+            let maxX = -Infinity;
+            let minY = Infinity;
+            let maxY = -Infinity;
+            polygon.forEach((pt) => {
+              if (pt.x < minX) minX = pt.x;
+              if (pt.x > maxX) maxX = pt.x;
+              if (pt.y < minY) minY = pt.y;
+              if (pt.y > maxY) maxY = pt.y;
+            });
+            bbox = {
+              x: (minX / dimensions.width) * 100,
+              y: (minY / dimensions.height) * 100,
+              width: ((maxX - minX) / dimensions.width) * 100,
+              height: ((maxY - minY) / dimensions.height) * 100
+            };
+          }
 
           return {
+            id: r.id || `room-${index}`,
             name: r.name,
             type: r.type,
             isWalkable: r.isWalkable,
-            bbox,
+            polygon,
+            doors,
             centroid,
-            polygon
+            bbox,
+            realWidthMeters: r.realWidthMeters ?? null,
+            realHeightMeters: r.realHeightMeters ?? null
           };
         });
+
+      // 6.5 Map corridor graph and translate percentage coords to pixel coords
+      const nodesToSave = (results.corridorGraph?.nodes ?? []).map((node) => ({
+        id: node.id,
+        x: (node.x / 100) * dimensions.width,
+        y: (node.y / 100) * dimensions.height
+      }));
+
+      const corridorGraphToSave: CorridorGraph = {
+        nodes: nodesToSave,
+        edges: results.corridorGraph?.edges ?? []
+      };
 
       // 7. Write to database
       await saveBuildingAndFloor(building, floor);
       await saveRooms(buildingId, floorId, roomsToSave);
+      await saveCorridorGraph(buildingId, floorId, corridorGraphToSave);
 
       // 8. Redirect back to dashboard
       navigate('/admin');
@@ -462,24 +505,35 @@ export default function UploadPage() {
                   <CheckCircle2 className="w-5 h-5 text-emerald-500" />
                   <span>AI Detection Complete</span>
                 </span>
-                <span className="text-xs text-emerald-400 font-medium px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-                  {results.rooms.length} items found
-                </span>
+                <div className="flex flex-wrap gap-2 justify-end">
+                  <span className="text-[10px] sm:text-xs text-emerald-400 font-medium px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+                    {results.rooms.length} rooms
+                  </span>
+                  <span className="text-[10px] sm:text-xs text-amber-400 font-medium px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20">
+                    {results.rooms.reduce((acc, r) => acc + (r.doors?.length ?? 0), 0)} doors
+                  </span>
+                  <span className="text-[10px] sm:text-xs text-blue-400 font-medium px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20">
+                    {results.corridorGraph?.nodes?.length ?? 0} nodes
+                  </span>
+                  <span className="text-[10px] sm:text-xs text-indigo-400 font-medium px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20">
+                    {results.corridorGraph?.edges?.length ?? 0} edges
+                  </span>
+                </div>
               </h3>
 
               {/* Scale Metrics */}
               <div className="grid grid-cols-3 gap-4 bg-surface-alt border border-border rounded-lg p-4">
                 <div className="flex flex-col gap-0.5">
                   <span className="text-[10px] font-bold text-text-secondary uppercase tracking-wider">Pixels Per Meter</span>
-                  <span className="text-lg font-mono font-bold text-white">{results.pixelsPerMeter} px/m</span>
+                  <span className="text-lg font-mono font-bold text-white">{results.scale?.pixelsPerMeter} px/m</span>
                 </div>
                 <div className="flex flex-col gap-0.5">
                   <span className="text-[10px] font-bold text-text-secondary uppercase tracking-wider">Floor Width</span>
-                  <span className="text-lg font-mono font-bold text-white">{results.floorWidthMeters} m</span>
+                  <span className="text-lg font-mono font-bold text-white">{results.scale?.floorWidthMeters} m</span>
                 </div>
                 <div className="flex flex-col gap-0.5">
                   <span className="text-[10px] font-bold text-text-secondary uppercase tracking-wider">Floor Height</span>
-                  <span className="text-lg font-mono font-bold text-white">{results.floorHeightMeters} m</span>
+                  <span className="text-lg font-mono font-bold text-white">{results.scale?.floorHeightMeters} m</span>
                 </div>
               </div>
 
@@ -491,16 +545,27 @@ export default function UploadPage() {
                 
                 <div className="max-h-[250px] overflow-y-auto border border-border rounded-md divide-y divide-border bg-bg/50">
                   {(results.rooms ?? [])
-                    .filter((room) => room && room.bbox)
+                    .filter((room) => room && (room.polygon || room.bbox))
                     .map((room, index) => (
-                      <div key={room.id || index} className="px-4 py-3 flex items-center justify-between gap-4 hover:bg-surface/50 transition-colors">
+                      <div key={room.id || index} className="px-4 py-3 flex items-center justify-between gap-4 hover:bg-surface/50 transition-colors font-sans">
                         <div className="flex flex-col gap-0.5 min-w-0">
                           <span className="text-sm font-medium text-white truncate">{room.name}</span>
                           <div className="flex items-center gap-1.5 mt-0.5">
-                            <span className="text-[10px] text-text-secondary">BBox:</span>
-                            <span className="text-[10px] font-mono text-text-secondary">
-                              (x: {Math.round(room.bbox?.x ?? 0)}, y: {Math.round(room.bbox?.y ?? 0)}, w: {Math.round(room.bbox?.width ?? 0)}, h: {Math.round(room.bbox?.height ?? 0)})
-                            </span>
+                            {room.polygon ? (
+                              <>
+                                <span className="text-[10px] text-text-secondary">Polygon:</span>
+                                <span className="text-[10px] font-mono text-text-secondary">
+                                  {room.polygon.length} vertices, {room.doors?.length ?? 0} doors
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <span className="text-[10px] text-text-secondary">BBox:</span>
+                                <span className="text-[10px] font-mono text-text-secondary">
+                                  (x: {Math.round(room.bbox?.x ?? 0)}, y: {Math.round(room.bbox?.y ?? 0)}, w: {Math.round(room.bbox?.width ?? 0)}, h: {Math.round(room.bbox?.height ?? 0)})
+                                </span>
+                              </>
+                            )}
                           </div>
                         </div>
                         

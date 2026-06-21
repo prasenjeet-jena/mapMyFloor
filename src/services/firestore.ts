@@ -1,4 +1,4 @@
-import { db } from './firebase';
+import { db, storage } from './firebase';
 import { 
   doc, 
   setDoc, 
@@ -9,9 +9,11 @@ import {
   orderBy,
   writeBatch,
   collectionGroup,
-  where
+  where,
+  deleteDoc
 } from 'firebase/firestore';
-import { Building, Floor, Room } from '../shared/types';
+import { ref, deleteObject } from 'firebase/storage';
+import { Building, Floor, Room, CorridorGraph } from '../shared/types';
 
 /**
  * Helper to ensure the local user document has the 'admin' role.
@@ -105,7 +107,15 @@ export const getAllFloors = async (): Promise<FloorListItem[]> => {
 };
 
 /**
- * Searches for a floor by ID across all buildings and retrieves its rooms.
+ * Saves the corridor graph for a specific building floor.
+ */
+export const saveCorridorGraph = async (buildingId: string, floorId: string, graph: CorridorGraph) => {
+  const graphRef = doc(db, `buildings/${buildingId}/floors/${floorId}/graph`, 'main');
+  await setDoc(graphRef, graph, { merge: false });
+};
+
+/**
+ * Searches for a floor by ID across all buildings and retrieves its rooms and corridor graph.
  */
 export const getFloorWithRooms = async (floorId: string) => {
   // Query all floors across all buildings
@@ -122,8 +132,50 @@ export const getFloorWithRooms = async (floorId: string) => {
   const roomsSnapshot = await getDocs(collection(db, `buildings/${buildingId}/floors/${floorId}/rooms`));
   const rooms = roomsSnapshot.docs.map(doc => doc.data()) as Room[];
 
+  // Fetch corridor graph for this floor
+  const graphDocRef = doc(db, `buildings/${buildingId}/floors/${floorId}/graph`, 'main');
+  const graphDocSnap = await getDoc(graphDocRef);
+  const corridorGraph = graphDocSnap.exists() ? (graphDocSnap.data() as CorridorGraph) : null;
+
   return {
     floor: floorData,
-    rooms
+    rooms,
+    corridorGraph
   };
+};
+
+/**
+ * Deletes a floor document, its rooms, corridor graph, and floor plan image in Storage.
+ */
+export const deleteFloor = async (buildingId: string, floorId: string) => {
+  // 1. Delete all rooms
+  const roomsColRef = collection(db, `buildings/${buildingId}/floors/${floorId}/rooms`);
+  const roomsSnapshot = await getDocs(roomsColRef);
+  if (!roomsSnapshot.empty) {
+    const roomsBatch = writeBatch(db);
+    roomsSnapshot.docs.forEach((doc) => {
+      roomsBatch.delete(doc.ref);
+    });
+    await roomsBatch.commit();
+  }
+
+  // 2. Delete corridor graph
+  const graphDocRef = doc(db, `buildings/${buildingId}/floors/${floorId}/graph`, 'main');
+  try {
+    await deleteDoc(graphDocRef);
+  } catch (error) {
+    console.warn("Could not delete corridor graph:", error);
+  }
+
+  // 3. Delete the floor document
+  const floorRef = doc(db, `buildings/${buildingId}/floors`, floorId);
+  await deleteDoc(floorRef);
+
+  // 4. Delete the floor plan image from Storage
+  const imageRef = ref(storage, `floorplans/${buildingId}/${floorId}.png`);
+  try {
+    await deleteObject(imageRef);
+  } catch (error) {
+    console.warn("Could not delete floor plan image from Storage:", error);
+  }
 };

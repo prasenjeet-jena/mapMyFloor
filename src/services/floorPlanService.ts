@@ -1,19 +1,22 @@
 import { httpsCallable } from 'firebase/functions';
 import { functions } from './firebase';
-import { Room } from '../shared/types';
+import { Room, CorridorGraph } from '../shared/types';
 import * as pdfjsLib from 'pdfjs-dist';
 
 // Set up pdf.js worker using CDN to avoid bundling complications
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.worker.min.mjs';
 
 export interface ParseFloorPlanResponse {
-  pixelsPerMeter: number;
-  floorWidthMeters: number;
-  floorHeightMeters: number;
+  scale: {
+    pixelsPerMeter: number;
+    floorWidthMeters: number;
+    floorHeightMeters: number;
+  };
   rooms: Room[];
   pngBlob: Blob;
   imageWidth: number;
   imageHeight: number;
+  corridorGraph?: CorridorGraph;
 }
 
 /**

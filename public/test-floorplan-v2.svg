@@ -1,0 +1,359 @@
+<svg width="100%" viewBox="0 0 760 860" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>NIQ Chennai Office — 5th Floor Architectural Plan</title>
+<desc>Detailed architectural floor plan with visible wall openings for doors, corridor walkways, central elevator core, and rooms distributed across four wings</desc>
+
+<defs>
+<marker id="arr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+<path d="M0 0L10 5L0 10z" fill="#555"/>
+</marker>
+</defs>
+
+<!-- ===================== BASE ===================== -->
+<rect width="760" height="860" fill="#f4f1ea"/>
+
+<text x="380" y="20" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#1a2332">NIQ Chennai Office — 5th Floor</text>
+<text x="380" y="34" text-anchor="middle" font-family="Arial" font-size="8" fill="#5a6677">82m × 64m  ·  Scale: 1px = 0.11m  ·  Capacity ~1000  ·  Central elevator core  ·  Doors shown as wall gaps</text>
+
+<!-- CORRIDOR WALKWAY FLOORING (light, drawn first so rooms/walls sit on top) -->
+<!-- Perimeter ring corridor -->
+<rect x="40" y="50" width="680" height="760" fill="#e9eef3"/>
+<!-- Inner block (rooms area) carved out leaving corridor ring -->
+<rect x="74" y="84" width="612" height="692" fill="#f4f1ea"/>
+
+<!-- Main corridors (cross + ring) in walkway color -->
+<rect x="40" y="408" width="680" height="44" fill="#dde6ee"/>   <!-- horizontal mid corridor -->
+<rect x="348" y="50" width="44" height="760" fill="#dde6ee"/>    <!-- vertical mid corridor -->
+<rect x="40" y="50" width="680" height="34" fill="#dde6ee"/>     <!-- top corridor -->
+<rect x="40" y="776" width="680" height="34" fill="#dde6ee"/>    <!-- bottom corridor -->
+<rect x="40" y="50" width="34" height="760" fill="#dde6ee"/>     <!-- left corridor -->
+<rect x="686" y="50" width="34" height="760" fill="#dde6ee"/>    <!-- right corridor -->
+
+<!-- corridor centerline hints -->
+<g stroke="#b9c6d2" stroke-width="0.6" stroke-dasharray="4 4">
+<line x1="40" y1="430" x2="720" y2="430"/>
+<line x1="370" y1="50" x2="370" y2="810"/>
+</g>
+
+<!-- ===================== OUTER WALL ===================== -->
+<rect x="40" y="50" width="680" height="760" fill="none" stroke="#1a2332" stroke-width="3"/>
+
+<!-- Helper note: each room = fill + wall stroke with a GAP for the door -->
+<!-- Door gaps are created by drawing wall as separate line segments leaving an opening, plus jamb ticks -->
+
+<!-- ================= CENTRAL ELEVATOR CORE ================= -->
+<rect x="300" y="380" width="160" height="120" fill="#cdd4dc" stroke="#5a6677" stroke-width="2"/>
+<text x="380" y="430" text-anchor="middle" font-family="Arial" font-size="10" font-weight="bold" fill="#2c3848">ELEVATOR CORE</text>
+<text x="380" y="444" text-anchor="middle" font-family="Arial" font-size="8" fill="#5a6677">6 lifts</text>
+<rect x="310" y="390" width="26" height="22" fill="#aeb8c2" stroke="#7a8794" stroke-width="0.5"/>
+<rect x="342" y="390" width="26" height="22" fill="#aeb8c2" stroke="#7a8794" stroke-width="0.5"/>
+<rect x="374" y="390" width="26" height="22" fill="#aeb8c2" stroke="#7a8794" stroke-width="0.5"/>
+<rect x="406" y="390" width="26" height="22" fill="#aeb8c2" stroke="#7a8794" stroke-width="0.5"/>
+<!-- Stair cores -->
+<rect x="264" y="380" width="36" height="120" fill="#c2cad2" stroke="#5a6677" stroke-width="1.2"/>
+<text x="282" y="444" text-anchor="middle" font-family="Arial" font-size="7" fill="#3a4756" transform="rotate(-90,282,444)">Stair A</text>
+<rect x="460" y="380" width="36" height="120" fill="#c2cad2" stroke="#5a6677" stroke-width="1.2"/>
+<text x="478" y="444" text-anchor="middle" font-family="Arial" font-size="7" fill="#3a4756" transform="rotate(-90,478,444)">Stair B</text>
+
+<!-- ================= RECEPTION (off north lift lobby) ================= -->
+<rect x="262" y="84" width="236" height="120" fill="#bfe3bf"/>
+<!-- walls with door gap at bottom center (opening to corridor) -->
+<path d="M262 84 H498 V204 H410 M350 204 H262 V84" fill="none" stroke="#3a4756" stroke-width="1.8"/>
+<!-- door jambs -->
+<line x1="350" y1="204" x2="350" y2="196" stroke="#3a4756" stroke-width="1.8"/>
+<line x1="410" y1="204" x2="410" y2="196" stroke="#3a4756" stroke-width="1.8"/>
+<text x="380" y="135" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#14501a">RECEPTION</text>
+<text x="380" y="150" text-anchor="middle" font-family="Arial" font-size="8" fill="#1d6e24">&amp; Visitor Lobby · 24m×13m</text>
+<rect x="330" y="170" width="100" height="14" rx="6" fill="#8fcf8f" stroke="#3a4756" stroke-width="0.5"/>
+<!-- Main entrance opening on top wall -->
+<line x1="350" y1="50" x2="410" y2="50" stroke="#bf3030" stroke-width="4"/>
+<text x="380" y="46" text-anchor="middle" font-family="Arial" font-size="7" font-weight="bold" fill="#a02020">MAIN ENTRANCE</text>
+
+<!-- Back entrance -->
+<line x1="350" y1="810" x2="410" y2="810" stroke="#c87820" stroke-width="4"/>
+<text x="380" y="826" text-anchor="middle" font-family="Arial" font-size="7" font-weight="bold" fill="#a05a16">BACK ENTRANCE</text>
+
+<!-- ============ helper macro pattern for closed rooms with a door gap ============ -->
+<!-- NW QUADRANT -->
+<!-- Desk Zone NW-1 (walkable, open) -->
+<rect x="74" y="84" width="178" height="96" fill="#fbf3d6"/>
+<rect x="74" y="84" width="178" height="96" fill="none" stroke="#c9a82c" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="163" y="126" text-anchor="middle" font-family="Arial" font-size="8.5" font-weight="bold" fill="#7d6608">Desk Zone NW-1</text>
+<text x="163" y="139" text-anchor="middle" font-family="Arial" font-size="6.5" fill="#9a7d0a">48 seats · open</text>
+
+<!-- Meet M1 (closed, door bottom) -->
+<rect x="74" y="180" width="62" height="48" fill="#cbb6e0"/>
+<path d="M74 180 H136 V228 H118 M98 228 H74 V180" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<line x1="98" y1="228" x2="98" y2="221" stroke="#3a4756" stroke-width="1.5"/>
+<line x1="118" y1="228" x2="118" y2="221" stroke="#3a4756" stroke-width="1.5"/>
+<text x="105" y="200" text-anchor="middle" font-family="Arial" font-size="7.5" font-weight="bold" fill="#4a1a6e">Meet M1</text>
+<text x="105" y="211" text-anchor="middle" font-family="Arial" font-size="6" fill="#6a3a8e">6 seats</text>
+
+<!-- Huddle (closed) -->
+<rect x="136" y="180" width="58" height="48" fill="#cbb6e0"/>
+<path d="M136 180 H194 V228 H178 M158 228 H136 V180" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<line x1="158" y1="228" x2="158" y2="221" stroke="#3a4756" stroke-width="1.5"/>
+<line x1="178" y1="228" x2="178" y2="221" stroke="#3a4756" stroke-width="1.5"/>
+<text x="165" y="200" text-anchor="middle" font-family="Arial" font-size="7" font-weight="bold" fill="#4a1a6e">Huddle</text>
+<text x="165" y="211" text-anchor="middle" font-family="Arial" font-size="6" fill="#6a3a8e">4 seats</text>
+
+<!-- Phone Booths (closed) -->
+<rect x="194" y="180" width="58" height="48" fill="#bcdcec"/>
+<path d="M194 180 H252 V228 H236 M216 228 H194 V180" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<line x1="216" y1="228" x2="216" y2="221" stroke="#3a4756" stroke-width="1.5"/>
+<line x1="236" y1="228" x2="236" y2="221" stroke="#3a4756" stroke-width="1.5"/>
+<text x="223" y="204" text-anchor="middle" font-family="Arial" font-size="6.5" font-weight="bold" fill="#0d3d6e">Booths</text>
+
+<!-- Desk Zone NW-2 (open) -->
+<rect x="74" y="228" width="178" height="104" fill="#fbf3d6"/>
+<rect x="74" y="228" width="178" height="104" fill="none" stroke="#c9a82c" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="163" y="274" text-anchor="middle" font-family="Arial" font-size="8.5" font-weight="bold" fill="#7d6608">Desk Zone NW-2</text>
+<text x="163" y="287" text-anchor="middle" font-family="Arial" font-size="6.5" fill="#9a7d0a">56 seats · open</text>
+
+<!-- Conf 5A (closed, door right) -->
+<rect x="74" y="332" width="100" height="60" fill="#9fb0e0"/>
+<path d="M74 332 H174 V356 M174 376 V392 H74 V332" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<line x1="174" y1="356" x2="167" y2="356" stroke="#3a4756" stroke-width="1.5"/>
+<line x1="174" y1="376" x2="167" y2="376" stroke="#3a4756" stroke-width="1.5"/>
+<text x="124" y="358" text-anchor="middle" font-family="Arial" font-size="8" font-weight="bold" fill="#1a2a7e">Conf 5A</text>
+<text x="124" y="370" text-anchor="middle" font-family="Arial" font-size="6.5" fill="#3a4a9e">8m×6m · 16</text>
+
+<!-- Meet M2 (closed, door right) -->
+<rect x="174" y="332" width="78" height="60" fill="#cbb6e0"/>
+<path d="M174 332 H252 V356 M252 376 V392 H174 V332" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<line x1="252" y1="356" x2="245" y2="356" stroke="#3a4756" stroke-width="1.5"/>
+<line x1="252" y1="376" x2="245" y2="376" stroke="#3a4756" stroke-width="1.5"/>
+<text x="213" y="358" text-anchor="middle" font-family="Arial" font-size="8" font-weight="bold" fill="#4a1a6e">Meet M2</text>
+<text x="213" y="370" text-anchor="middle" font-family="Arial" font-size="6.5" fill="#6a3a8e">8 seats</text>
+
+<!-- ================= NE QUADRANT ================= -->
+<!-- Desk Zone NE-1 (open) -->
+<rect x="508" y="84" width="178" height="96" fill="#fbf3d6"/>
+<rect x="508" y="84" width="178" height="96" fill="none" stroke="#c9a82c" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="597" y="126" text-anchor="middle" font-family="Arial" font-size="8.5" font-weight="bold" fill="#7d6608">Desk Zone NE-1</text>
+<text x="597" y="139" text-anchor="middle" font-family="Arial" font-size="6.5" fill="#9a7d0a">48 seats · open</text>
+
+<!-- Boardroom (closed, door bottom) -->
+<rect x="508" y="180" width="178" height="72" fill="#8088c8"/>
+<path d="M508 180 H686 V252 H607 M567 252 H508 V180" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<line x1="567" y1="252" x2="567" y2="245" stroke="#3a4756" stroke-width="1.5"/>
+<line x1="607" y1="252" x2="607" y2="245" stroke="#3a4756" stroke-width="1.5"/>
+<text x="597" y="212" text-anchor="middle" font-family="Arial" font-size="9" font-weight="bold" fill="#fff">BOARDROOM</text>
+<text x="597" y="225" text-anchor="middle" font-family="Arial" font-size="7" fill="#e0e0f5">16m×9m · 40 seats</text>
+
+<!-- Desk Zone NE-2 (open) -->
+<rect x="508" y="252" width="178" height="80" fill="#fbf3d6"/>
+<rect x="508" y="252" width="178" height="80" fill="none" stroke="#c9a82c" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="597" y="288" text-anchor="middle" font-family="Arial" font-size="8.5" font-weight="bold" fill="#7d6608">Desk Zone NE-2</text>
+<text x="597" y="301" text-anchor="middle" font-family="Arial" font-size="6.5" fill="#9a7d0a">44 seats · open</text>
+
+<!-- Conf 5B (closed, door left) -->
+<rect x="586" y="332" width="100" height="60" fill="#9fb0e0"/>
+<path d="M586 356 V332 H686 V392 H586 V376" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<line x1="586" y1="356" x2="593" y2="356" stroke="#3a4756" stroke-width="1.5"/>
+<line x1="586" y1="376" x2="593" y2="376" stroke="#3a4756" stroke-width="1.5"/>
+<text x="636" y="358" text-anchor="middle" font-family="Arial" font-size="8" font-weight="bold" fill="#1a2a7e">Conf 5B</text>
+<text x="636" y="370" text-anchor="middle" font-family="Arial" font-size="6.5" fill="#3a4a9e">8m×6m · 16</text>
+
+<!-- Meet M3 (closed, door left) -->
+<rect x="508" y="332" width="78" height="60" fill="#cbb6e0"/>
+<path d="M508 356 V332 H586 V392 H508 V376" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<line x1="508" y1="356" x2="515" y2="356" stroke="#3a4756" stroke-width="1.5"/>
+<line x1="508" y1="376" x2="515" y2="376" stroke="#3a4756" stroke-width="1.5"/>
+<text x="547" y="358" text-anchor="middle" font-family="Arial" font-size="8" font-weight="bold" fill="#4a1a6e">Meet M3</text>
+<text x="547" y="370" text-anchor="middle" font-family="Arial" font-size="6.5" fill="#6a3a8e">8 seats</text>
+
+<!-- ============ NORTH-CENTER small rooms (below reception) ============ -->
+<!-- WC North (closed) -->
+<rect x="262" y="204" width="74" height="46" fill="#a6c8ea"/>
+<path d="M262 204 H336 V232 M336 250 H312 M292 250 H262 V204" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="299" y="222" text-anchor="middle" font-family="Arial" font-size="7.5" font-weight="bold" fill="#0d3d6e">WC North</text>
+<text x="299" y="233" text-anchor="middle" font-family="Arial" font-size="6" fill="#1a5c9a">M·F·Acc</text>
+
+<!-- Pantry N (closed) -->
+<rect x="424" y="204" width="74" height="46" fill="#f5d9a8"/>
+<path d="M424 204 H498 V250 H452 M432 250 H424 V204" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="461" y="222" text-anchor="middle" font-family="Arial" font-size="7.5" font-weight="bold" fill="#7d3c00">Pantry N</text>
+<text x="461" y="233" text-anchor="middle" font-family="Arial" font-size="6" fill="#a05000">coffee</text>
+
+<!-- ============ MID LEFT (flanking elevator) ============ -->
+<!-- Admin (closed, door right) -->
+<rect x="74" y="408" width="86" height="44" fill="#f0c89a"/>
+<path d="M74 408 H160 V422 M160 438 V452 H74 V408" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="117" y="428" text-anchor="middle" font-family="Arial" font-size="7.5" font-weight="bold" fill="#7d3c00">Admin</text>
+<text x="117" y="439" text-anchor="middle" font-family="Arial" font-size="6" fill="#a05000">6m×5m</text>
+
+<!-- Finance (closed) -->
+<rect x="160" y="408" width="92" height="44" fill="#f0c89a"/>
+<path d="M160 408 H252 V422 M252 438 V452 H160 V408" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="206" y="428" text-anchor="middle" font-family="Arial" font-size="7.5" font-weight="bold" fill="#7d3c00">Finance</text>
+<text x="206" y="439" text-anchor="middle" font-family="Arial" font-size="6" fill="#a05000">6m×5m</text>
+
+<!-- HR Cabin (closed) -->
+<rect x="74" y="452" width="86" height="44" fill="#f0c89a"/>
+<path d="M74 452 H160 V466 M160 482 V496 H74 V452" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="117" y="472" text-anchor="middle" font-family="Arial" font-size="7.5" font-weight="bold" fill="#7d3c00">HR Cabin</text>
+<text x="117" y="483" text-anchor="middle" font-family="Arial" font-size="6" fill="#a05000">6m×5m</text>
+
+<!-- Meet M4 (closed) -->
+<rect x="160" y="452" width="92" height="44" fill="#cbb6e0"/>
+<path d="M160 452 H252 V466 M252 482 V496 H160 V452" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="206" y="472" text-anchor="middle" font-family="Arial" font-size="7.5" font-weight="bold" fill="#4a1a6e">Meet M4</text>
+<text x="206" y="483" text-anchor="middle" font-family="Arial" font-size="6" fill="#6a3a8e">8 seats</text>
+
+<!-- ============ MID RIGHT ============ -->
+<!-- Medical (closed) -->
+<rect x="508" y="408" width="86" height="44" fill="#9fd6d6"/>
+<path d="M508 408 H594 V422 M594 438 V452 H508 V408" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="551" y="428" text-anchor="middle" font-family="Arial" font-size="7.5" font-weight="bold" fill="#0d4d4d">Medical</text>
+<text x="551" y="439" text-anchor="middle" font-family="Arial" font-size="6" fill="#1a6d6d">5m×4m</text>
+
+<!-- Prayer (closed) -->
+<rect x="594" y="408" width="92" height="44" fill="#d8c89a"/>
+<path d="M594 408 H686 V452 H594 V438 M594 422 V408" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="640" y="428" text-anchor="middle" font-family="Arial" font-size="7.5" font-weight="bold" fill="#4d3d0d">Prayer Rm</text>
+<text x="640" y="439" text-anchor="middle" font-family="Arial" font-size="6" fill="#6d5d1d">4m×4m</text>
+
+<!-- Mother's Room (closed) -->
+<rect x="508" y="452" width="86" height="44" fill="#f0b8d0"/>
+<path d="M508 452 H594 V466 M594 482 V496 H508 V452" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="551" y="471" text-anchor="middle" font-family="Arial" font-size="7" font-weight="bold" fill="#7d0d4d">Mother's</text>
+<text x="551" y="482" text-anchor="middle" font-family="Arial" font-size="6" fill="#a01a6d">Room</text>
+
+<!-- Meet M5 (closed) -->
+<rect x="594" y="452" width="92" height="44" fill="#cbb6e0"/>
+<path d="M594 452 H686 V496 H594 V482 M594 466 V452" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="640" y="472" text-anchor="middle" font-family="Arial" font-size="7.5" font-weight="bold" fill="#4a1a6e">Meet M5</text>
+<text x="640" y="483" text-anchor="middle" font-family="Arial" font-size="6" fill="#6a3a8e">8 seats</text>
+
+<!-- ============ SW QUADRANT ============ -->
+<!-- Desk Zone SW-1 (open) -->
+<rect x="74" y="500" width="178" height="96" fill="#fbf3d6"/>
+<rect x="74" y="500" width="178" height="96" fill="none" stroke="#c9a82c" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="163" y="542" text-anchor="middle" font-family="Arial" font-size="8.5" font-weight="bold" fill="#7d6608">Desk Zone SW-1</text>
+<text x="163" y="555" text-anchor="middle" font-family="Arial" font-size="6.5" fill="#9a7d0a">52 seats · open</text>
+
+<!-- Meet M6 (closed, door top) -->
+<rect x="74" y="596" width="62" height="48" fill="#cbb6e0"/>
+<path d="M74 596 H98 M118 596 H136 V644 H74 V596" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="105" y="618" text-anchor="middle" font-family="Arial" font-size="7.5" font-weight="bold" fill="#4a1a6e">Meet M6</text>
+<text x="105" y="629" text-anchor="middle" font-family="Arial" font-size="6" fill="#6a3a8e">6 seats</text>
+
+<!-- Booths SW (closed) -->
+<rect x="136" y="596" width="48" height="48" fill="#bcdcec"/>
+<path d="M136 596 H150 M170 596 H184 V644 H136 V596" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="160" y="622" text-anchor="middle" font-family="Arial" font-size="6.5" font-weight="bold" fill="#0d3d6e">Booths</text>
+
+<!-- Conf 5C (closed, door top) -->
+<rect x="184" y="596" width="68" height="48" fill="#9fb0e0"/>
+<path d="M184 596 H208 M228 596 H252 V644 H184 V596" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="218" y="618" text-anchor="middle" font-family="Arial" font-size="7.5" font-weight="bold" fill="#1a2a7e">Conf 5C</text>
+<text x="218" y="629" text-anchor="middle" font-family="Arial" font-size="6" fill="#3a4a9e">16 seats</text>
+
+<!-- Desk Zone SW-2 (open) -->
+<rect x="74" y="644" width="178" height="66" fill="#fbf3d6"/>
+<rect x="74" y="644" width="178" height="66" fill="none" stroke="#c9a82c" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="163" y="674" text-anchor="middle" font-family="Arial" font-size="8.5" font-weight="bold" fill="#7d6608">Desk Zone SW-2</text>
+<text x="163" y="687" text-anchor="middle" font-family="Arial" font-size="6.5" fill="#9a7d0a">36 seats · open</text>
+
+<!-- WC West (closed) -->
+<rect x="74" y="710" width="90" height="66" fill="#a6c8ea"/>
+<path d="M74 710 H164 V740 M164 760 V776 H74 V710" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="119" y="740" text-anchor="middle" font-family="Arial" font-size="7.5" font-weight="bold" fill="#0d3d6e">WC West</text>
+<text x="119" y="751" text-anchor="middle" font-family="Arial" font-size="6" fill="#1a5c9a">M·F·Acc</text>
+
+<!-- ============ SE QUADRANT ============ -->
+<!-- Desk Zone SE-1 (open) -->
+<rect x="508" y="500" width="178" height="96" fill="#fbf3d6"/>
+<rect x="508" y="500" width="178" height="96" fill="none" stroke="#c9a82c" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="597" y="542" text-anchor="middle" font-family="Arial" font-size="8.5" font-weight="bold" fill="#7d6608">Desk Zone SE-1</text>
+<text x="597" y="555" text-anchor="middle" font-family="Arial" font-size="6.5" fill="#9a7d0a">52 seats · open</text>
+
+<!-- Conf 5D (closed, door top) -->
+<rect x="508" y="596" width="68" height="48" fill="#9fb0e0"/>
+<path d="M508 596 H532 M552 596 H576 V644 H508 V596" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="542" y="618" text-anchor="middle" font-family="Arial" font-size="7.5" font-weight="bold" fill="#1a2a7e">Conf 5D</text>
+<text x="542" y="629" text-anchor="middle" font-family="Arial" font-size="6" fill="#3a4a9e">16 seats</text>
+
+<!-- Booths SE (closed) -->
+<rect x="576" y="596" width="48" height="48" fill="#bcdcec"/>
+<path d="M576 596 H590 M610 596 H624 V644 H576 V596" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="600" y="622" text-anchor="middle" font-family="Arial" font-size="6.5" font-weight="bold" fill="#0d3d6e">Booths</text>
+
+<!-- Meet M7 (closed, door top) -->
+<rect x="624" y="596" width="62" height="48" fill="#cbb6e0"/>
+<path d="M624 596 H648 M668 596 H686 V644 H624 V596" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="655" y="618" text-anchor="middle" font-family="Arial" font-size="7.5" font-weight="bold" fill="#4a1a6e">Meet M7</text>
+<text x="655" y="629" text-anchor="middle" font-family="Arial" font-size="6" fill="#6a3a8e">6 seats</text>
+
+<!-- Desk Zone SE-2 (open) -->
+<rect x="508" y="644" width="178" height="66" fill="#fbf3d6"/>
+<rect x="508" y="644" width="178" height="66" fill="none" stroke="#c9a82c" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="597" y="674" text-anchor="middle" font-family="Arial" font-size="8.5" font-weight="bold" fill="#7d6608">Desk Zone SE-2</text>
+<text x="597" y="687" text-anchor="middle" font-family="Arial" font-size="6.5" fill="#9a7d0a">36 seats · open</text>
+
+<!-- WC East (closed) -->
+<rect x="596" y="710" width="90" height="66" fill="#a6c8ea"/>
+<path d="M596 710 H686 V776 H596 V760 M596 740 V710" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="641" y="740" text-anchor="middle" font-family="Arial" font-size="7.5" font-weight="bold" fill="#0d3d6e">WC East</text>
+<text x="641" y="751" text-anchor="middle" font-family="Arial" font-size="6" fill="#1a5c9a">M·F·Acc</text>
+
+<!-- ============ SOUTH-CENTER AMENITIES ============ -->
+<!-- Cafeteria (walkable-ish big space, door top) -->
+<rect x="262" y="500" width="236" height="96" fill="#ffce85"/>
+<path d="M262 500 H350 M410 500 H498 V596 H262 V500" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="380" y="540" text-anchor="middle" font-family="Arial" font-size="10" font-weight="bold" fill="#7d3c00">CAFETERIA</text>
+<text x="380" y="554" text-anchor="middle" font-family="Arial" font-size="7" fill="#a05000">&amp; Pantry · 26m×11m · 120 seats</text>
+
+<!-- Recreation (closed) -->
+<rect x="262" y="596" width="100" height="56" fill="#9fd69f"/>
+<path d="M262 596 H300 M320 596 H362 V652 H262 V596" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="312" y="620" text-anchor="middle" font-family="Arial" font-size="7.5" font-weight="bold" fill="#14501a">Recreation</text>
+<text x="312" y="631" text-anchor="middle" font-family="Arial" font-size="6" fill="#1d6e24">games·10m×6m</text>
+
+<!-- Dance / Activity (closed) -->
+<rect x="362" y="596" width="100" height="56" fill="#cbb6e0"/>
+<path d="M362 596 H400 M420 596 H462 V652 H362 V596" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="412" y="620" text-anchor="middle" font-family="Arial" font-size="7.5" font-weight="bold" fill="#4a1a6e">Dance /</text>
+<text x="412" y="631" text-anchor="middle" font-family="Arial" font-size="6.5" fill="#6a3a8e">Activity Rm</text>
+
+<!-- WC South (closed) -->
+<rect x="262" y="652" width="100" height="58" fill="#a6c8ea"/>
+<path d="M262 652 H300 M320 652 H362 V710 H262 V652" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="312" y="678" text-anchor="middle" font-family="Arial" font-size="7.5" font-weight="bold" fill="#0d3d6e">WC South</text>
+<text x="312" y="689" text-anchor="middle" font-family="Arial" font-size="6" fill="#1a5c9a">M·F·Accessible</text>
+
+<!-- IT / Server (closed) -->
+<rect x="362" y="652" width="100" height="58" fill="#c4ccd4"/>
+<path d="M362 652 H400 M420 652 H462 V710 H362 V652" fill="none" stroke="#3a4756" stroke-width="1.5"/>
+<text x="412" y="678" text-anchor="middle" font-family="Arial" font-size="7.5" font-weight="bold" fill="#333">IT / Server</text>
+<text x="412" y="689" text-anchor="middle" font-family="Arial" font-size="6" fill="#555">5m×4m</text>
+
+<!-- ============ CORRIDOR LABELS ============ -->
+<text x="380" y="403" text-anchor="middle" font-family="Arial" font-size="7" fill="#7a8a99">Main Corridor (Horizontal)</text>
+<text x="360" y="240" text-anchor="middle" font-family="Arial" font-size="7" fill="#7a8a99" transform="rotate(-90,360,240)">Central Corridor</text>
+
+<!-- ============ SCALE BAR + NORTH ============ -->
+<rect x="74" y="826" width="80" height="6" fill="none" stroke="#333" stroke-width="1"/>
+<rect x="74" y="826" width="40" height="6" fill="#333"/>
+<text x="74" y="824" font-family="Arial" font-size="6.5" fill="#333">0</text>
+<text x="114" y="824" text-anchor="middle" font-family="Arial" font-size="6.5" fill="#333">5m</text>
+<text x="154" y="824" text-anchor="middle" font-family="Arial" font-size="6.5" fill="#333">10m</text>
+<text x="170" y="831" font-family="Arial" font-size="6.5" fill="#888">80px = 10m (8px/m)</text>
+
+<line x1="690" y1="834" x2="690" y2="820" stroke="#333" stroke-width="1.5" marker-end="url(#arr)"/>
+<text x="690" y="848" text-anchor="middle" font-family="Arial" font-size="8" font-weight="bold" fill="#333">N</text>
+
+<line x1="40" y1="844" x2="420" y2="844" stroke="#777" stroke-width="0.5" marker-end="url(#arr)" marker-start="url(#arr)"/>
+<text x="230" y="855" text-anchor="middle" font-family="Arial" font-size="7" fill="#777">82 meters wide × 64 meters deep</text>
+
+<!-- ============ LEGEND ============ -->
+<g font-family="Arial" font-size="6.5" fill="#333">
+<rect x="440" y="820" width="8" height="6" fill="#bfe3bf"/><text x="451" y="826">Reception</text>
+<rect x="500" y="820" width="8" height="6" fill="#9fb0e0"/><text x="511" y="826">Conf</text>
+<rect x="540" y="820" width="8" height="6" fill="#cbb6e0"/><text x="551" y="826">Meeting</text>
+<rect x="592" y="820" width="8" height="6" fill="#fbf3d6" stroke="#c9a82c" stroke-width="0.4"/><text x="603" y="826">Desks</text>
+<rect x="440" y="832" width="8" height="6" fill="#ffce85"/><text x="451" y="838">Cafeteria</text>
+<rect x="500" y="832" width="8" height="6" fill="#a6c8ea"/><text x="511" y="838">Restroom</text>
+<rect x="556" y="832" width="8" height="6" fill="#dde6ee"/><text x="567" y="838">Walkway</text>
+</g>
+</svg>

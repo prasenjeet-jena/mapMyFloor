@@ -1,16 +1,72 @@
 import React, { useEffect, useState } from 'react';
-import { Shield, Settings, Plus, Map, Calendar, Layers, Database, ArrowRight, Loader2, AlertTriangle } from 'lucide-react';
+import { Shield, Settings, Plus, Map, Calendar, Layers, Database, ArrowRight, Loader2, AlertTriangle, Trash2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getAllFloors, getFloorWithRooms, FloorListItem } from '../../services/firestore';
+import { getAllFloors, getFloorWithRooms, deleteFloor, FloorListItem } from '../../services/firestore';
 import { useFloor } from '../../hooks/useFloor';
+import { useAuth } from '../../App';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../../services/firebase';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const { setCurrentFloor } = useFloor();
   
+  const { user } = useAuth();
   const [floors, setFloors] = useState<FloorListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [deleteConfirmFloor, setDeleteConfirmFloor] = useState<FloorListItem | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Check user role
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      if (!user) {
+        setIsAdmin(false);
+        return;
+      }
+      try {
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists() && userDoc.data()?.role === 'admin') {
+          setIsAdmin(true);
+        } else {
+          setIsAdmin(false);
+        }
+      } catch (err) {
+        console.error('Error checking admin status:', err);
+        setIsAdmin(false);
+      }
+    };
+    checkAdminStatus();
+  }, [user]);
+
+  // Toast auto dismiss
+  useEffect(() => {
+    if (toastMessage) {
+      const timer = setTimeout(() => setToastMessage(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [toastMessage]);
+
+  const handleConfirmDelete = async () => {
+    if (!deleteConfirmFloor) return;
+    setDeleting(true);
+    setError(null);
+    try {
+      await deleteFloor(deleteConfirmFloor.buildingId, deleteConfirmFloor.floorId);
+      setToastMessage("Floor plan deleted successfully.");
+      const data = await getAllFloors();
+      setFloors(data);
+    } catch (err: any) {
+      console.error("Failed to delete floor plan:", err);
+      setError(err?.message || "Failed to delete the selected floor plan.");
+    } finally {
+      setDeleting(false);
+      setDeleteConfirmFloor(null);
+    }
+  };
 
   useEffect(() => {
     const fetchFloorsData = async () => {
@@ -160,9 +216,23 @@ export default function AdminDashboard() {
               >
                 <div className="flex justify-between items-start gap-4">
                   <div className="min-w-0">
-                    <span className="text-[10px] font-bold text-accent uppercase tracking-wider bg-accent/10 px-2 py-0.5 rounded border border-accent/20">
-                      {floor.buildingName}
-                    </span>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-[10px] font-bold text-accent uppercase tracking-wider bg-accent/10 px-2 py-0.5 rounded border border-accent/20">
+                        {floor.buildingName}
+                      </span>
+                      {isAdmin && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDeleteConfirmFloor(floor);
+                          }}
+                          className="p-1 text-text-secondary hover:text-red-400 hover:bg-red-500/10 rounded transition-all cursor-pointer"
+                          title="Delete Floor Plan"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
                     <h3 className="text-lg font-display font-bold text-white mt-2 group-hover:text-accent transition-colors truncate">
                       {floor.label}
                     </h3>
@@ -202,6 +272,57 @@ export default function AdminDashboard() {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmFloor && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 font-sans">
+          <div className="bg-surface border border-border rounded-lg p-6 max-w-md w-full shadow-2xl flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center gap-3 text-red-500">
+              <AlertTriangle className="w-8 h-8 shrink-0 animate-pulse" />
+              <h3 className="text-lg font-display font-bold text-white">Delete Floor Plan?</h3>
+            </div>
+            <p className="text-text-secondary text-sm">
+              Are you sure you want to delete <strong className="text-white">{deleteConfirmFloor.label}</strong> of <strong className="text-white">{deleteConfirmFloor.buildingName}</strong>?
+            </p>
+            <p className="text-text-disabled text-xs bg-surface-alt/50 border border-border p-2.5 rounded">
+              This will permanently delete this floor plan, all its rooms/desks, corridor lines, and the schematic image. This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setDeleteConfirmFloor(null)}
+                disabled={deleting}
+                className="px-4 py-2 bg-surface-alt hover:bg-surface border border-border text-text-primary text-sm font-semibold rounded cursor-pointer disabled:cursor-not-allowed transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDelete}
+                disabled={deleting}
+                className="px-4 py-2 bg-red-600 hover:bg-red-500 disabled:bg-surface-alt text-white text-sm font-semibold rounded flex items-center gap-1.5 cursor-pointer disabled:cursor-not-allowed transition-all"
+              >
+                {deleting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Deleting...</span>
+                  </>
+                ) : (
+                  <span>Delete Plan</span>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Floating Success Toast */}
+      {toastMessage && (
+        <div className="fixed bottom-4 right-4 z-50 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-4 py-2.5 rounded-lg text-sm font-semibold shadow-lg flex items-center gap-2 animate-bounce">
+          <span>✓</span>
+          <span>{toastMessage}</span>
+        </div>
+      )}
     </div>
   );
 }

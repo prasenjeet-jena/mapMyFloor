@@ -8,6 +8,7 @@ export enum RoomType {
   ELEVATOR = 'elevator',
   STAIRCASE = 'staircase',
   CORRIDOR = 'corridor',
+  LOBBY = 'lobby',
   MEDICAL = 'medical',
   PRAYER = 'prayer',
   RECREATION = 'recreation',
@@ -15,6 +16,9 @@ export enum RoomType {
   HR = 'hr',
   IT_SERVER = 'it_server',
   BOARDROOM = 'boardroom',
+  PANTRY = 'pantry',
+  MOTHERS_ROOM = 'mothers_room',
+  PHONE_BOOTH = 'phone_booth',
   OTHER = 'other'
 }
 
@@ -61,19 +65,42 @@ export interface Floor {
   scaleManuallyVerified: boolean;
 }
 
+export type Polygon = Point[];
+export type Door = Point;
+
+export interface GraphNode {
+  id: string;
+  x: number;
+  y: number;
+}
+
+export interface GraphEdge {
+  from: string;
+  to: string;
+}
+
+export interface CorridorGraph {
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+}
+
 export interface Room {
   id?: string;
   buildingId?: string;
   floorId?: string;
   name: string;
   type: RoomType;
-  polygon?: Point[]; // Array of vertices
+  polygon?: Polygon; // Array of vertices
+  doors?: Door[]; // Door locations
   centroid?: Point;
   occupant?: string | null;
   occupantEmail?: string | null;
   isWalkable: boolean;
   realWidth?: string;
   realHeight?: string;
+  realWidthMeters?: number | null;
+  realHeightMeters?: number | null;
+  entranceSide?: 'north' | 'south' | 'east' | 'west' | null;
   bbox?: {
     x: number;
     y: number;
@@ -93,4 +120,10 @@ export interface NavigationRoute {
   distanceMeters: number;
   estimatedTimeMinutes: number;
   steps: Direction[];
+}
+
+export interface Corridor {
+  id?: string;
+  name: string;
+  centerline: Point[];
 }

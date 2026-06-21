@@ -47,18 +47,40 @@ exports.parseFloorPlan = onCall({
 
     const systemPrompt = `You are analyzing an office floor plan image. Extract structured data. Return ONLY valid JSON with no markdown, no code fences, no prose. Format:
 {
-  "pixelsPerMeter": number (estimate from scale bar or dimension labels; if none, estimate from typical room sizes),
-  "floorWidthMeters": number,
-  "floorHeightMeters": number,
+  "scale": { 
+    "pixelsPerMeter": number, 
+    "floorWidthMeters": number, 
+    "floorHeightMeters": number 
+  },
   "rooms": [
     {
-      "name": string (room label as shown, e.g. 'Conference Room 5A'),
-      "type": one of [meeting_room, conference_room, desk_area, reception, cafeteria, restroom, elevator, staircase, corridor, medical, prayer, recreation, admin, hr, it_server, boardroom, other],
-      "bbox": { "x": number, "y": number, "width": number, "height": number } (as PERCENTAGE 0-100 of image dimensions),
-      "isWalkable": boolean (true for corridors, lobbies, open areas; false for closed rooms)
+      "id": string, // stable slug, e.g. "conf-5a"
+      "name": string,
+      "type": one of [meeting_room, conference_room, boardroom, desk_area, reception, cafeteria, restroom, elevator, staircase, corridor, lobby, medical, prayer, recreation, admin, hr, it_server, pantry, mothers_room, phone_booth, other],
+      "polygon": [ {"x": number, "y": number}, ... ], // ordered vertices tracing the room's actual walls (4+ points), not just a bounding box
+      "realWidthMeters": number, // read from the dimension label printed in the room if present (e.g. 8 for "8m×6m"), otherwise estimate or null
+      "realHeightMeters": number, // read from the dimension label printed in the room if present (e.g. 6 for "8m×6m"), otherwise estimate or null
+      "isWalkable": boolean, // true ONLY for corridor, lobby, reception, cafeteria, desk_area, recreation, elevator lobby; false for closed offices/meeting rooms
+      "doors": [ {"x": number, "y": number} ] // door location(s) on the room boundary where it connects to a corridor
     }
-  ]
+  ],
+  "corridorGraph": {
+    "nodes": [ 
+      { "id": string, "x": number, "y": number } // waypoints along corridor centerlines + at intersections + at each room door
+    ],
+    "edges": [ 
+      { "from": string, "to": string } // connections forming the walkable network; corridors connect at intersections; each room's door connects to the nearest corridor node
+    ]
+  }
 }
+
+Instructions:
+- Trace room polygons precisely to the actual drawn walls (forming closed loops of at least 4 points).
+- Identify every corridor and represent the walkable circulation as a CONNECTED graph of nodes and edges.
+- Place a node at every corridor intersection and at every room door location.
+- Connect each room's door node into the corridor graph using edges so any room is fully reachable in the network.
+- Make sure the graph is fully connected.
+- Coordinates are PERCENT (0-100) of the image width and height.
 Identify every distinct labeled room, desk zone, corridor, and amenity. Be thorough.`;
 
     const imagePart = {
